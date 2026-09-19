@@ -153,17 +153,15 @@ A segmentação permitirá representar a região ocupada pela pessoa de maneira 
 
 ## Dataset utilizado
 
-**Nome:** `[PREENCHER]`
+**Nome:** `Construction Site Safety`
 
-**Fonte:** `[Roboflow / Kaggle / COCO / outra]`
+**Fonte:** `Kaggle — snehilsanyal/construction-site-safety-image-dataset-roboflow`
 
-**Link:** `[PREENCHER]`
+**Link:** `https://www.kaggle.com/datasets/snehilsanyal/construction-site-safety-image-dataset-roboflow`
 
-**Licença:** `[PREENCHER]`
+**Total de imagens:** `[2.834]`
 
-**Total de imagens:** `[PREENCHER]`
-
-**Formato das anotações:** `[YOLO / COCO / outro]`
+**Formato das anotações:** `YOLO (arquivos .txt)`
 
 ### Requisitos
 
@@ -181,10 +179,10 @@ O dataset deve possuir:
 
 | Conjunto    | Imagens | Percentual |
 | ----------- | ------: | ---------: |
-| Treinamento |   `[ ]` |     `[ ]%` |
-| Validação   |   `[ ]` |     `[ ]%` |
-| Teste       |   `[ ]` |     `[ ]%` |
-| **Total**   | **[ ]** |   **100%** |
+| Treinamento |   `[2.123]` |     `[ 74,9 ]%` |
+| Validação   |   `[ 580 ]` |     `[ 20,5% ]%` |
+| Teste       |   `[ 131     ]` |     `[ 4,6% ]%` |
+| **Total**   | **[ 2.834 ]** |   **100%** |
 
 A divisão dos dados será realizada com seed fixa para favorecer a reprodutibilidade dos experimentos.
 
@@ -196,11 +194,18 @@ As principais classes utilizadas no projeto são:
 
 | Classe        | Descrição             | Tarefa                 |
 | ------------- | --------------------- | ---------------------- |
-| `Person`      | Pessoa/trabalhador    | Detecção + Segmentação |
-| `Helmet`      | Capacete de segurança | Detecção               |
-| `Safety Vest` | Colete de segurança   | Detecção               |
+| `Capacete`    | Capacete de segurança | Detecção               |
+| `Máscara`     | Máscara | Detecção    |                        |
+| `Sem Capacete`| Ausência de capacete  | Detecção               |
+| `Sem Máscara` | Ausência de máscara   | Detecção               |
+| `Sem Colete`  | Ausência de colete    | Detecção               |
+| `Pessoa`      | Pessoa/trabalhador   | Detecção                |
+| `Cone de Sinalização` | Cone de sinalização   | Detecção       |
+| `Colete Refleto` | Colete refletor   | Detecção                |
+| `Maquinaria` | Maquinaria   | Detecção                         |
+| `Veículo` | Veículo   | Detecção                               |
 
-> A lista definitiva de classes será ajustada de acordo com o dataset selecionado.
+> A versão utilizada no notebook contém 10 classes: Capacete, Máscara, Sem Capacete, Sem Máscara, Sem Colete, Pessoa, Cone de Sinalização, Colete Refletor, Maquinaria, Veículo.
 
 ---
 
@@ -221,20 +226,6 @@ Serão analisados:
 * condições de iluminação;
 * oclusões;
 * desbalanceamento.
-
-### Distribuição das classes
-
-![Distribuição das classes](docs/images/class_distribution.png)
-
-### Exemplos do dataset
-
-![Exemplos do dataset](docs/images/dataset_samples.png)
-
-### Distribuição das imagens
-
-![Distribuição dos dados](docs/images/dataset_distribution.png)
-
-> As imagens acima serão adicionadas após a conclusão da análise exploratória.
 
 ---
 
@@ -281,29 +272,36 @@ O detector será treinado utilizando **fine-tuning** de um modelo pré-treinado.
 ### Modelo
 
 ```text
-Modelo: [YOLOv8 / YOLO11 / outro]
+Modelo: [YOLOv8]
 ```
 
 ### Classes
 
 ```text
-Person
-Helmet
-Safety Vest
+Capacete
+Máscara
+Sem Capacete
+Sem Máscara
+Sem Colete
+Pessoa
+Cone de Sinalização
+Colete Refletor
+Maquinaria
+Veículo
 ```
 
 ### Hiperparâmetros
 
 | Parâmetro     | Valor |
 | ------------- | ----: |
-| Modelo        | `[ ]` |
-| Épocas        | `[ ]` |
-| Batch size    | `[ ]` |
-| Image size    | `[ ]` |
-| Learning rate | `[ ]` |
-| Optimizer     | `[ ]` |
-| Seed          | `[ ]` |
-| GPU           | `[ ]` |
+| Modelo        | `[ YOLOv8m ]` |
+| Épocas        | `[40]` |
+| Batch size    | `[16]` |
+| Image size    | `[640]` |
+| Learning rate | `[0.01 (lr0 padrão registrado pelo Ultralytics)]` |
+| Optimizer     | `[auto]` |
+| Seed          | `[42]` |
+| GPU           | `[Tesla T4 (14913 MiB)]` |
 
 ---
 
@@ -387,23 +385,20 @@ Quando apropriado, também será analisado o Dice Score.
 
 ## Detecção
 
-| Classe      | Precision |  Recall |  AP@0.5 | AP@0.5:0.95 |
-| ----------- | --------: | ------: | ------: | ----------: |
-| Person      |     `[ ]` |   `[ ]` |   `[ ]` |       `[ ]` |
-| Helmet      |     `[ ]` |   `[ ]` |   `[ ]` |       `[ ]` |
-| Safety Vest |     `[ ]` |   `[ ]` |   `[ ]` |       `[ ]` |
-| **mAP**     |   **[ ]** | **[ ]** | **[ ]** |     **[ ]** |
-
+| Classe      |      Images |  Instances       |  Box(P , R ,  mAP50  mAP50-95 ) | AP@0.5:0.95 |
+| ----------- |     --------: | ------: | ------: | ----------: |
+|  Capacete            30        110      0.962      0.913        0.97       0.649
+|  Máscara             16         28      0.937      0.75         0.799      0.552
+|  Sem Capacete        25         41      0.866      0.634        0.595      0.361
+|  Sem Máscara         30         79      0.928      0.81         0.892      0.455
+|  Sem Colete          36         90          1      0.818        0.844      0.551
+|  Pessoa              59        174      0.933      0.845        0.912      0.593
+|  Cone de Sinalização 8         92       0.775      0.511        0.507      0.232
+|  Colete Refletor     22         61      0.883      0.868        0.916      0.674
+|  Maquinaria          22         44      0.925      0.837        0.882      0.665
+|  Veículo             15         41      0.827      0.816        0.86       0.543
 ---
 
-## Segmentação
-
-| Classe    | Precision |  Recall |     IoU |    Dice |
-| --------- | --------: | ------: | ------: | ------: |
-| Person    |     `[ ]` |   `[ ]` |   `[ ]` |   `[ ]` |
-| **Média** |   **[ ]** | **[ ]** | **[ ]** | **[ ]** |
-
----
 
 # 📊 12. Matriz de confusão
 
@@ -471,32 +466,6 @@ Uma das análises centrais do projeto será comparar os resultados obtidos pelas
 | Contorno            | Não representa precisamente | Representa       |
 | Aplicação           | EPIs e pessoas              | Pessoas          |
 
-### Comparação visual
-
-```text
-IMAGEM ORIGINAL
-
-        ↓
-
-┌─────────────────────┐
-│      DETECÇÃO       │
-│                     │
-│  ┌───────────────┐  │
-│  │    Pessoa     │  │
-│  └───────────────┘  │
-└─────────────────────┘
-
-        VS.
-
-┌─────────────────────┐
-│     SEGMENTAÇÃO     │
-│                     │
-│    ███████          │
-│   █████████         │
-│    ███████          │
-│      ███            │
-└─────────────────────┘
-```
 
 Os resultados reais serão apresentados nesta seção após o treinamento.
 
@@ -513,21 +482,10 @@ Como etapa final, o sistema será aplicado a um vídeo real ou representativo de
 * processamento pelo modelo treinado;
 * resultado gravado em vídeo.
 
-### Informações
-
-| Item               | Valor         |
-| ------------------ | ------------- |
-| Fonte              | `[PREENCHER]` |
-| Duração            | `[PREENCHER]` |
-| Resolução          | `[PREENCHER]` |
-| FPS                | `[PREENCHER]` |
-| Pessoas observadas | `[PREENCHER]` |
 
 ### 🎬 Demonstração
 
-**Vídeo-pitch:** `[LINK DO YOUTUBE / GOOGLE DRIVE]`
-
-**Vídeo com inferência:** `[LINK]`
+**Vídeo-pitch:** `[https://www.youtube.com/watch?v=ofIVM01xJx8]`
 
 ---
 
@@ -547,8 +505,8 @@ Recomenda-se utilizar:
 ## 16.1 Clonar o repositório
 
 ```bash
-git clone [URL_DO_REPOSITORIO]
-cd [NOME_DO_REPOSITORIO]
+git clone [https://github.com/pedrohsmoura/sistematizacao-visao-computacional.git]
+cd [sistematizacao-visao-computacional]
 ```
 
 ---
@@ -556,7 +514,7 @@ cd [NOME_DO_REPOSITORIO]
 ## 16.2 Instalar dependências
 
 ```bash
-pip install -r requirements.txt
+pip install 
 ```
 
 ---
@@ -567,100 +525,15 @@ O notebook principal está disponível em:
 
 ```text
 notebooks/
-└── projeto_seguranca_trabalho.ipynb
+└── visao_computacional_sistemarizacao_sec_trab.ipynb
 ```
 
 Também é possível executar diretamente pelo Google Colab:
 
-**[ABRIR NO GOOGLE COLAB]**
-
 ---
 
-## 16.4 Executar treinamento
 
-```bash
-python src/train_detection.py
-```
-
-Para o modelo de segmentação:
-
-```bash
-python src/train_segmentation.py
-```
-
-> Os comandos definitivos serão atualizados após a implementação do projeto.
-
----
-
-# 📁 17. Estrutura do repositório
-
-O projeto será organizado da seguinte maneira:
-
-```text
-seguranca-trabalho-visao-computacional/
-│
-├── README.md
-│
-├── requirements.txt
-│
-├── LICENSE
-│
-├── .gitignore
-│
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── README.md
-│
-├── notebooks/
-│   ├── 01_eda.ipynb
-│   ├── 02_detection.ipynb
-│   ├── 03_segmentation.ipynb
-│   └── 04_evaluation_video.ipynb
-│
-├── src/
-│   ├── data/
-│   │   ├── prepare_dataset.py
-│   │   └── validate_dataset.py
-│   │
-│   ├── detection/
-│   │   ├── train.py
-│   │   └── predict.py
-│   │
-│   ├── segmentation/
-│   │   ├── train.py
-│   │   └── predict.py
-│   │
-│   ├── evaluation/
-│   │   ├── metrics.py
-│   │   └── confusion_matrix.py
-│   │
-│   └── video/
-│       └── inference.py
-│
-├── configs/
-│   ├── detection.yaml
-│   └── segmentation.yaml
-│
-├── models/
-│   └── README.md
-│
-├── results/
-│   ├── figures/
-│   ├── metrics/
-│   ├── predictions/
-│   └── videos/
-│
-├── docs/
-│   ├── images/
-│   └── relatorio.pdf
-│
-└── LICENSE
-```
-
----
-
-# 🧪 18. Reprodutibilidade
+# 🧪 17. Reprodutibilidade
 
 Para garantir a reprodução dos experimentos serão registrados:
 
@@ -681,63 +554,23 @@ Sempre que possível, os experimentos serão executados utilizando seeds fixas.
 
 ---
 
-# 📌 19. Cronograma de desenvolvimento
-
-| Fase   | Atividade                       | Status          |
-| ------ | ------------------------------- | --------------- |
-| Fase 1 | Definição do problema e dataset | 🟡 Em andamento |
-| Fase 2 | Baseline de detecção            | ⚪ Pendente      |
-| Fase 3 | Segmentação                     | ⚪ Pendente      |
-| Fase 4 | Avaliação e vídeo               | ⚪ Pendente      |
-| Fase 5 | Entrega e apresentação          | ⚪ Pendente      |
-
-### Legenda
-
-🟢 Concluído
-🟡 Em andamento
-⚪ Pendente
-
----
-
-# 👥 20. Integrantes
-
-| Integrante | Responsabilidades    |
-| ---------- | -------------------- |
-| `[Nome]`   | Dataset / EDA        |
-| `[Nome]`   | Detecção             |
-| `[Nome]`   | Segmentação          |
-| `[Nome]`   | Avaliação            |
-| `[Nome]`   | Vídeo / documentação |
-
-> As responsabilidades podem ser compartilhadas entre os integrantes.
-
----
-
-# 📚 21. Referências
-
-### Dataset
-
-> `[REFERÊNCIA DO DATASET]`
+# 📚 18. Referências
 
 ### YOLO / Ultralytics
 
-> Ultralytics. **Ultralytics YOLO Documentation**. `[LINK]`
+> Ultralytics. **Ultralytics YOLO Documentation**.
 
 ### PyTorch
 
-> PyTorch. **PyTorch Documentation**. `[LINK]`
+> PyTorch. **PyTorch Documentation**. 
 
 ### OpenCV
 
-> OpenCV. **OpenCV Documentation**. `[LINK]`
-
-### Trabalhos científicos
-
-> `[ADICIONAR ARTIGOS UTILIZADOS NO PROJETO]`
+> OpenCV. **OpenCV Documentation**. 
 
 ---
 
-# 🤖 22. Uso de Inteligência Artificial
+# 🤖 19. Uso de Inteligência Artificial
 
 Ferramentas de inteligência artificial generativa foram utilizadas como apoio durante o desenvolvimento do projeto.
 
@@ -756,7 +589,7 @@ Os resultados apresentados no projeto correspondem aos experimentos efetivamente
 
 ---
 
-# ⚠️ 23. Limitações
+# ⚠️ 20. Limitações
 
 O sistema desenvolvido possui limitações relacionadas principalmente à qualidade e diversidade do dataset utilizado.
 
@@ -766,7 +599,7 @@ Além disso, o protótipo deve ser considerado uma ferramenta experimental de ap
 
 ---
 
-# 🔮 24. Trabalhos futuros
+# 🔮 21. Trabalhos futuros
 
 Como possíveis extensões do projeto, podem ser consideradas:
 
@@ -787,7 +620,7 @@ Como possíveis extensões do projeto, podem ser consideradas:
 
 ---
 
-# 🏆 25. Conclusão
+# 🏆 22. Conclusão
 
 Este projeto apresenta uma abordagem de visão computacional aplicada à segurança do trabalho em canteiros de obras, combinando detecção de objetos e segmentação de pessoas.
 
