@@ -1,0 +1,26 @@
+# Dependencias do notebook (notebooks/visao_computacional_sistematizacao_sec_trab.ipynb)
+# No Google Colab torch/torchvision ja vem instalados.
+
+# Deep learning / deteccao
+ultralytics
+torch
+torchvision
+
+# Deteccoes, anotadores e rastreamento (ByteTrack)
+supervision
+
+# Dataset
+kagglehub
+
+# Processamento de imagem e video
+opencv-python
+yt-dlp
+
+# Analise e visualizacao
+numpy
+pandas
+matplotlib
+seaborn
+
+# Configuracao
+pyyaml

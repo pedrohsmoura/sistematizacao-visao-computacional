@@ -82,9 +82,10 @@ A solução será composta por duas tarefas principais.
 Utilização de um detector baseado em **YOLO** para localizar:
 
 ```text
-Person
-Helmet
-Safety Vest
+Capacete              Sem Colete            Colete Refletor
+Máscara               Pessoa                Maquinaria
+Sem Capacete          Cone de Sinalização   Veículo
+Sem Máscara
 ```
 
 O detector produzirá:
@@ -381,12 +382,25 @@ Quando apropriado, também será analisado o Dice Score.
 
 # 📈 11. Resultados
 
-> Esta seção será preenchida após o treinamento e avaliação final.
+O modelo foi treinado por 40 épocas em GPU Tesla T4, com duração total de
+aproximadamente 55 minutos.
 
-## Detecção
+## Resumo global (conjunto de validação)
 
-| Classe      |      Images   |  Instances       |  Box(P    |    R       |  mAP50-95 ) | AP@0.5:0.95 |
-| ----------- |-------------  |  --------------- |--------   | ---------- | ----------  |  ---------- |
+Métricas registradas pelo Ultralytics ao final do treinamento, sobre as 114
+imagens do conjunto de validação (697 instâncias):
+
+| Métrica | Valor |
+| ------- | ----: |
+| Precisão média | 0,923 |
+| Recall médio | 0,796 |
+| mAP@0.5 | 0,853 |
+| mAP@0.5:0.95 | 0,575 |
+
+## Detecção por classe (conjunto de teste)
+
+| Classe | Imagens | Instâncias | Precisão | Recall | mAP@0.5 | mAP@0.5:0.95 |
+| ------ | ------: | ---------: | -------: | -----: | ------: | -----------: |
 |  Capacete   |          30   |      110         |   0.962   |   0.913    |    0.97     |  0.649      |
 |  Máscara    |          16   |       28         |   0.937   |   0.75     |    0.799    |  0.552      |
 |  Sem Capacete |        25   |       41         |   0.866   |   0.634    |    0.595    |  0.361      |
@@ -485,7 +499,7 @@ Como etapa final, o sistema será aplicado a um vídeo real ou representativo de
 
 ### 🎬 Demonstração
 
-**Vídeo-pitch:** `[https://www.youtube.com/watch?v=ofIVM01xJx8]`
+**Vídeo-pitch:** <https://www.youtube.com/watch?v=ofIVM01xJx8>
 
 ---
 
@@ -502,11 +516,37 @@ Recomenda-se utilizar:
 
 ---
 
+## 16.0 Estrutura do repositório
+
+```text
+sistematizacao-visao-computacional/
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── notebooks/
+│   └── visao_computacional_sistematizacao_sec_trab.ipynb
+├── src/                  # scripts auxiliares extraídos do notebook
+├── data/
+│   ├── raw/              # dataset original (não versionado)
+│   └── processed/        # dados preparados (não versionado)
+├── models/               # pesos treinados .pt (não versionados)
+├── results/
+│   ├── figures/          # gráficos e imagens de saída
+│   └── metrics/          # métricas exportadas
+├── docs/images/          # imagens usadas neste README
+└── videos/               # vídeos de entrada e saída (não versionados)
+```
+
+> Datasets, pesos (`.pt`) e vídeos não são versionados por questão de tamanho.
+> Eles são reconstruídos ao executar o notebook.
+
+---
+
 ## 16.1 Clonar o repositório
 
 ```bash
-git clone [https://github.com/pedrohsmoura/sistematizacao-visao-computacional.git]
-cd [sistematizacao-visao-computacional]
+git clone https://github.com/pedrohsmoura/sistematizacao-visao-computacional.git
+cd sistematizacao-visao-computacional
 ```
 
 ---
@@ -514,8 +554,11 @@ cd [sistematizacao-visao-computacional]
 ## 16.2 Instalar dependências
 
 ```bash
-pip install 
+pip install -r requirements.txt
 ```
+
+No Google Colab as dependências principais já são instaladas pela primeira
+célula do notebook.
 
 ---
 
@@ -525,7 +568,7 @@ O notebook principal está disponível em:
 
 ```text
 notebooks/
-└── visao_computacional_sistemarizacao_sec_trab.ipynb
+└── visao_computacional_sistematizacao_sec_trab.ipynb
 ```
 
 Também é possível executar diretamente pelo Google Colab:
@@ -636,11 +679,11 @@ Ao final, espera-se disponibilizar um sistema funcional, documentado e reproduz�
 
 | Recurso                 | Link     |
 | ----------------------- | -------- |
-| 📓 Google Colab         | `[LINK]` |
+| 📓 Notebook             | [notebooks/visao_computacional_sistematizacao_sec_trab.ipynb](notebooks/visao_computacional_sistematizacao_sec_trab.ipynb) |
 | 💻 GitHub               | `[LINK]` |
-| 🎥 Vídeo-pitch          | `[LINK]` |
+| 🎥 Vídeo-pitch          | <https://www.youtube.com/watch?v=ofIVM01xJx8> |
 | 🎬 Vídeo com inferência | `[LINK]` |
-| 📊 Dataset              | `[LINK]` |
+| 📊 Dataset              | <https://www.kaggle.com/datasets/snehilsanyal/construction-site-safety-image-dataset-roboflow> |
 | 📄 Relatório técnico    | `[LINK]` |
 
 ---
